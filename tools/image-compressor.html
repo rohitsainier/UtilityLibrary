@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Compression</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f3f5;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #fff;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    #previewContainer {
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+    }
+
+    #previewImage {
+      max-width: 100%;
+      max-height: 600px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .upload-section {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .upload-button,
+    .compress-button
+    {
+      font-size: 16px;
+      padding: 12px 30px;
+      background-color: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .download-button {
+      font-size: 16px;
+      padding: 12px 30px;
+      background-color: #062806;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .upload-button:hover,
+    .compress-button:hover
+    {
+      background-color: #1976D2;
+    }
+    .download-button:hover {
+      background-color: #062806;
+    }
+    
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Image Compression</h1>
+
+    <div id="previewContainer">
+      <img id="previewImage" alt="Preview" />
+    </div>
+
+    <div class="upload-section">
+      <input type="file" id="imageInput" accept="image/*" />
+      <br>
+    </div>
+
+    <button id="compressButton" class="compress-button hidden">Compress Image</button>
+    <a id="downloadButton" class="download-button hidden" download></a>
+  </div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const previewImage = document.getElementById('previewImage');
+    const uploadButton = document.getElementById('uploadButton');
+    const compressButton = document.getElementById('compressButton');
+    const downloadButton = document.getElementById('downloadButton');
+
+    let compressedImageBlob = null;
+
+    function handleImageInputChange() {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(event) {
+          previewImage.src = event.target.result;
+          previewContainer.style.display = 'block';
+          compressButton.classList.remove('hidden');
+          downloadButton.classList.add('hidden');
+        };
+      } else {
+        previewImage.src = '';
+        previewContainer.style.display = 'none';
+        compressButton.classList.add('hidden');
+        downloadButton.classList.add('hidden');
+      }
+    }
+
+    function compressImage() {
+      const file = imageInput.files[0];
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function(event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+
+          canvas.toBlob(function(blob) {
+            const downloadURL = URL.createObjectURL(blob);
+            downloadButton.href = downloadURL;
+            downloadButton.download = 'compressed-image.jpg';
+            downloadButton.innerHTML = 'Download';
+            downloadButton.classList.remove('hidden');
+            compressButton.classList.add('hidden');
+            compressedImageBlob = blob;
+          }, 'image/jpeg', 0.7); // Adjust the compression quality here (0.7 = 70% quality)
+        };
+      };
+    }
+
+    imageInput.addEventListener('change', handleImageInputChange);
+    compressButton.addEventListener('click', compressImage);
+    downloadButton.addEventListener('click', function() {
+      if (compressedImageBlob) {
+        downloadButton.href = URL.createObjectURL(compressedImageBlob);
+      }
+    });
+  </script>
+</body>
+</html>
