@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f3f5;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #fff;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      resize: vertical;
+    }
+
+    .button-section {
+      margin-top: 20px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 12px 30px;
+      background-color: #2196F3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1976D2;
+    }
+
+    .diff-word1 {
+      background-color: #FFCDD2;
+    }
+
+    .diff-word2 {
+      background-color: #C8E6C9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Text Comparison</h1>
+
+    <textarea id="text1" placeholder="Enter text for file 1"></textarea>
+
+    <textarea id="text2" placeholder="Enter text for file 2"></textarea>
+
+    <div class="button-section">
+      <button id="compareButton">Compare</button>
+    </div>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const compareButton = document.getElementById('compareButton');
+    const resultDiv = document.getElementById('result');
+
+    compareButton.addEventListener('click', function() {
+      const text1 = document.getElementById('text1').value;
+      const text2 = document.getElementById('text2').value;
+
+      const words1 = text1.split(' ');
+      const words2 = text2.split(' ');
+
+      const maxLength = Math.max(words1.length, words2.length);
+      
+      const differences1 = words1.reduce((result, word, index) => {
+        if (word !== words2[index]) {
+          result.push(index);
+        }
+        return result;
+      }, []);
+
+      const differences2 = words2.reduce((result, word, index) => {
+        if (word !== words1[index]) {
+          result.push(index);
+        }
+        return result;
+      }, []);
+
+      let resultHtml1 = '';
+      let resultHtml2 = '';
+
+      words1.forEach((word, index) => {
+        const isDifferent = differences1.includes(index);
+        resultHtml1 += `<span class="${isDifferent ? 'diff-word1' : ''}">${word}</span> `;
+      });
+
+      words2.forEach((word, index) => {
+        const isDifferent = differences2.includes(index);
+        resultHtml2 += `<span class="${isDifferent ? 'diff-word2' : ''}">${word}</span> `;
+      });
+
+      resultDiv.innerHTML = `<div>${resultHtml1}</div><div>${resultHtml2}</div>`;
+    });
+  </script>
+</body>
+</html>
