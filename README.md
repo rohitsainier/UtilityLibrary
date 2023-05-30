@@ -9,6 +9,7 @@ Utility Tools is a collection of various web-based utility tools that provide qu
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
+- [TODO](#todo)
 
 ## Tools
 
@@ -41,7 +42,20 @@ This project is licensed under the [MIT License](LICENSE). You are free to modif
 
 For any questions or inquiries related to the Utility Tools project, please contact us at utility.tools@example.com. We appreciate your feedback and suggestions.
 
+## TODO
+
+- [x] Complete random color generator
+- [x] Implement text-to-speech converter
+- [x] Improve image compression algorithm
+- [x] Refactor text compare functionality
+- [ ] Add password strength indicator
+- [ ] Enhance Lorem Ipsum generator with custom options
+- [ ] Implement advanced QR code features
+- [ ] Expand unit converter to support additional units
+- [ ] Add syntax highlighting to JSON formatter
+- [ ] Improve URL shortener performance
+- [ ] Enhance BMI calculator with additional metrics
+
 ---
 
 Please note that the above README is a sample template. You should customize it to fit your project's specific needs and add more detailed information as necessary.
-
