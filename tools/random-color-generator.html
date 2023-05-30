@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random Color Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .color-box {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .hex-code {
+      margin-bottom: 10px;
+    }
+
+    .copy-icon {
+      font-size: 24px;
+      cursor: pointer;
+      color: #fff;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .copy-icon:hover {
+      opacity: 1;
+    }
+
+    .confirmation-message {
+      font-size: 14px;
+      color: #777;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="color-box" id="colorBox">
+    <div class="hex-code" id="hexCode"></div>
+    <i class="copy-icon fas fa-copy" onclick="copyHexCode()"></i>
+    <span class="confirmation-message" id="confirmationMessage">Copied!</span>
+  </div>
+
+  <script>
+    function generateRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+
+      document.getElementById('colorBox').style.backgroundColor = color;
+      document.getElementById('hexCode').innerText = color;
+    }
+
+    function copyHexCode() {
+      var hexCode = document.getElementById('hexCode');
+      var range = document.createRange();
+      range.selectNode(hexCode);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      document.execCommand('copy');
+      window.getSelection().removeAllRanges();
+
+      // Show a confirmation message
+      var confirmationMessage = document.getElementById('confirmationMessage');
+      confirmationMessage.style.display = 'block';
+      setTimeout(function() {
+        confirmationMessage.style.display = 'none';
+      }, 2000);
+    }
+
+    document.body.onkeyup = function(e) {
+      if (e.keyCode === 32) { // Spacebar key code
+        generateRandomColor();
+      }
+    };
+
+    generateRandomColor(); // Generate initial random color
+  </script>
+</body>
+</html>
