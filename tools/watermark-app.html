@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Watermark App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #photoUpload {
+            margin-bottom: 10px;
+        }
+
+        #preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #preview img {
+            max-width: 600px; /* Adjust the maximum width as needed */
+            max-height: 600px; /* Adjust the maximum height as needed */
+        }
+
+        #applyWatermark {
+            display: block;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #applyWatermark:hover {
+            background-color: #45a049;
+        }
+
+        #downloadBtn {
+            display: none;
+            width: fit-content;
+            margin: 10px auto;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #downloadBtn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Watermark App</h1>
+
+        <!-- Photo Upload Input -->
+        <label for="photoUpload">Select an image:</label>
+        <input type="file" id="photoUpload" accept="image/*">
+
+         <!-- Watermark Text Input -->
+         <label for="watermarkText">Watermark Text:</label>
+         <input type="text" id="watermarkText" placeholder="Enter watermark text...">
+
+        <!-- Preview Section -->
+        <div id="preview"></div>
+
+        <!-- Apply Watermark Button -->
+        <button id="applyWatermark">Apply Watermark</button>
+
+        <!-- Download Button -->
+        <a href="#" download="watermarked_photo.jpg" id="downloadBtn">Download</a>
+
+    </div>
+
+    <script>
+        // Handle photo upload
+        document.getElementById('photoUpload').addEventListener('change', function (e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var img = document.createElement('img');
+                img.src = event.target.result;
+                img.style.maxWidth = '100%';
+
+                // Display the preview image
+                document.getElementById('preview').innerHTML = '';
+                document.getElementById('preview').appendChild(img);
+                document.body.classList.add('image-loaded');
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Apply watermark
+        document.getElementById('applyWatermark').addEventListener('click', function () {
+            var watermarkText = document.getElementById('watermarkText').value; // Get the custom watermark text
+
+        var img = document.querySelector('#preview img');
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var originalWidth = img.naturalWidth; // Use naturalWidth to get the original width
+        var originalHeight = img.naturalHeight; // Use naturalHeight to get the original height
+        var aspectRatio = originalWidth / originalHeight;
+
+        canvas.width = originalWidth;
+        canvas.height = originalHeight;
+
+        ctx.drawImage(img, 0, 0, originalWidth, originalHeight);
+
+        ctx.font = 'bold 120px fantasy';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+
+        var textWidth = ctx.measureText(watermarkText).width;
+        var x = originalWidth - 30; // Adjust the horizontal position
+        var y = originalHeight / 2 - 30; // Adjust the vertical position
+
+        ctx.shadowOffsetX = 10; // Set the X offset of the shadow
+        ctx.shadowOffsetY = 10; // Set the Y offset of the shadow
+        ctx.shadowBlur = 10; // Set the blur level of the shadow
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // Set the color of the shadow
+
+        ctx.translate(x, y); // Translate to the desired position
+        ctx.rotate(-Math.PI / 2); // Rotate the context by -90 degrees (in radians)
+
+        ctx.fillText(watermarkText, 0, 0);
+
+        var watermarkedImg = new Image();
+        watermarkedImg.src = canvas.toDataURL();
+
+        // Display the watermarked image
+        document.getElementById('preview').innerHTML = '';
+        document.getElementById('preview').appendChild(watermarkedImg);
+
+        // Update the download link with the watermarked image URL and original file name
+        var downloadLink = document.getElementById('downloadBtn');
+        downloadLink.href = watermarkedImg.src;
+        downloadLink.style.display = 'block';
+});
+
+    </script>
+</body>
+</html>
