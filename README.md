@@ -17,6 +17,7 @@ Utility Tools is a collection of various web-based utility tools that provide qu
 - [Text to Speech Converter](tools/text-to-speech-converter.html): Convert text to speech using a built-in speech synthesis engine.
 - [Image Compressor](tools/image-compressor.html): Compress images without losing quality to reduce file size.
 - [Text Compare](tools/compare.html): Compare two texts and identify the differences between them.
+- [Watermark App](tools/watermark-app.html): Apply custom watermarks to images.
 - [JPG to PNG Converter](tools/JPG-to-PNG-converter.html): Convert JPG images to PNG format with ease.
 - [Password Generator](tools/password-generator.html): Generate secure and random passwords with customizable options.
 - [Lorem Ipsum Generator](tools/lorem-ipsum-generator.html): Generate dummy text (lorem ipsum) for design and layout purposes.
@@ -48,6 +49,7 @@ For any questions or inquiries related to the Utility Tools project, please cont
 - [x] Implement text-to-speech converter
 - [x] Improve image compression algorithm
 - [x] Refactor text compare functionality
+- [x] Apply custom watermarks to images.
 - [ ] Add password strength indicator
 - [ ] Enhance Lorem Ipsum generator with custom options
 - [ ] Implement advanced QR code features
