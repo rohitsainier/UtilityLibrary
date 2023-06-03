@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Emoji Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #convertBtn {
+            display: block;
+            width: fit-content;
+            margin: 0 auto;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #convertBtn:hover {
+            background-color: #45a049;
+        }
+
+        #convertedText {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Emoji Converter</h1>
+
+        <!-- Text Input -->
+        <label for="textInput">Enter text:</label>
+        <textarea id="textInput" placeholder="Enter your text..."></textarea>
+
+        <!-- Convert Button -->
+        <button id="convertBtn">Convert to Emoji</button>
+
+        <!-- Converted Text -->
+        <div id="convertedText"></div>
+    </div>
+
+    <script>
+        // Convert text to emoji
+        function convertToEmoji() {
+            var textInput = document.getElementById('textInput').value;
+
+            // Map of text characters to corresponding emoji characters
+            var emojiMap = {
+                a: '🅰️',
+                b: '🅱️',
+                c: '🌜',
+                d: '🌛',
+                e: '🧩',
+                f: '🎏',
+                g: '🌀',
+                h: '🏠',
+                i: '👁️',
+                j: '🌡️',
+                k: '🎋',
+                l: '🔥',
+                m: 'Ⓜ️',
+                n: '📰',
+                o: '🔵',
+                p: '🅿️',
+                q: '🍳',
+                r: '®️',
+                s: '💲',
+                t: '🌴',
+                u: '⛑️',
+                v: '🔽',
+                w: '🌊',
+                x: '❌',
+                y: '🔱',
+                z: '💤',
+                ' ': '  ',
+                '0': '0️⃣',
+                '1': '1️⃣',
+                '2': '2️⃣',
+                '3': '3️⃣',
+                '4': '4️⃣',
+                '5': '5️⃣',
+                '6': '6️⃣',
+                '7': '7️⃣',
+                '8': '8️⃣',
+                '9': '9️⃣',
+                '!': '❗',
+                '?': '❓',
+                '.': '🔵',
+                ',': '🌻',
+                '+': '➕',
+                '-': '➖',
+                '*': '✳️',
+                '/': '➗',
+                '%': '💯',
+                '#': '#️⃣',
+                '@': '📢',
+                '$': '💲',
+                '&': '🔗',
+                '<': '⬅️',
+                '>': '➡️',
+                '(': '🔵',
+                ')': '🔵',
+                '[': '🔵',
+                ']': '🔵',
+                '{': '🔵',
+                '}': '🔵',
+                '"': '🔵',
+                '\'': '🔵',
+                '\\': '🔵',
+                '|': '🔵',
+                '`': '🔵',
+                '~': '🔵'
+            };
+
+            var convertedText = '';
+
+            // Convert each character of the text to emoji
+            for (var i = 0; i < textInput.length; i++) {
+                var char = textInput[i].toLowerCase();
+                var emoji = emojiMap[char] || char;
+                convertedText += emoji;
+            }
+
+            // Display the converted text
+            document.getElementById('convertedText').textContent = convertedText;
+        }
+
+        // Convert button click event
+        document.getElementById('convertBtn').addEventListener('click', function () {
+            convertToEmoji();
+        });
+    </script>
+</body>
+</html>
