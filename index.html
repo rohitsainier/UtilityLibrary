@@ -24,6 +24,7 @@
     h1 {
       text-align: center;
       margin-bottom: 30px;
+      color: #333;
     }
 
     .carousel {
@@ -36,13 +37,26 @@
     .card {
       width: 300px;
       height: 200px;
-      background-color: #ccc;
+      background-color: #f9f9f9;
       margin: 10px;
       border-radius: 5px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .card:hover {
+      background-color: #e8e8e8;
+      transform: scale(1.02);
+    }
+
+    .card span {
+      color: #333;
+      font-weight: bold;
+      text-align: center;
     }
 
     .btn {
@@ -96,43 +110,43 @@
     <h1>Utility Tools</h1>
 
     <div class="carousel">
-      <a href="tools/random-color-generator.html" class="card">
+      <a href="tools/random-color-generator.html" class="card" style="background-color: #ffa500;">
         <span>Random Color Generator</span>
       </a>
-      <a href="tools/text-to-speech-converter.html" class="card">
+      <a href="tools/text-to-speech-converter.html" class="card" style="background-color: #00bfff;">
         <span>Text to Speech Converter</span>
       </a>
-      <a href="tools/image-compressor.html" class="card">
+      <a href="tools/image-compressor.html" class="card" style="background-color: #ee82ee;">
         <span>Image Compressor</span>
       </a>
-      <a href="tools/compare.html" class="card">
+      <a href="tools/compare.html" class="card" style="background-color: #00ced1;">
         <span>Text Compare</span>
       </a>
-      <a href="tools/watermark-app.html" class="card">
+      <a href="tools/watermark-app.html" class="card" style="background-color: #ff69b4;">
         <span>Watermark App</span>
       </a>
-      <a href="tools/text-to-emoji-converter.html" class="card">
+      <a href="tools/text-to-emoji-converter.html" class="card" style="background-color: #9acd32;">
         <span>Text to Emoji Converter</span>
       </a>
-      <a href="tools/password-generator.html" class="card">
+      <a href="tools/password-generator.html" class="card" style="background-color: #808080;">
         <span>Password Generator</span>
       </a>
-      <a href="tools/lorem-ipsum-generator.html" class="card">
+      <a href="tools/lorem-ipsum-generator.html" class="card" style="background-color: #b8860b;">
         <span>Lorem Ipsum Generator</span>
       </a>
-      <a href="tools/qrcode-generator.html" class="card">
+      <a href="tools/qrcode-generator.html" class="card" style="background-color: #1e90ff;">
         <span>QR Code Generator</span>
       </a>
-      <a href="tools/unit-converter.html" class="card">
+      <a href="tools/unit-converter.html" class="card" style="background-color: #ff4500;">
         <span>Unit Converter</span>
       </a>
-      <a href="tools/json-formatter-validator.html" class="card">
+      <a href="tools/json-formatter-validator.html" class="card" style="background-color: #9370db;">
         <span>JSON Formatter and Validator</span>
       </a>
-      <a href="tools/url-shortener.html" class="card">
+      <a href="tools/url-shortener.html" class="card" style="background-color: #556b2f;">
         <span>URL Shortener</span>
       </a>
-      <a href="tools/bmi-calculator.html" class="card">
+      <a href="tools/bmi-calculator.html" class="card" style="background-color: #8b0000;">
         <span>BMI Calculator</span>
       </a>
     </div>
