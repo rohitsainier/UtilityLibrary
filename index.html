@@ -1,93 +1,204 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Utility Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --bg-dark: #181a1b;
+      --bg-card: rgba(44, 47, 51, 0.85);
+      --accent: #78f7ff;
+      --accent2: #6e6eff;
+      --text-main: #e3e3e3;
+      --text-secondary: #9fa6ad;
+      --glass-blur: blur(10px);
+      --shadow: 0 8px 24px rgba(0,0,0,0.3);
+      --card-radius: 18px;
+      --transition: 0.3s cubic-bezier(.77,0,.18,1);
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f5f5f5;
+      background: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
     }
 
     .container {
-      background-color: #fff;
-      padding: 20px;
-      color: #000;
-      height: 100vh;
+      padding: 40px 20px 60px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      min-height: 90vh;
+      justify-content: flex-start;
     }
 
     h1 {
+      font-size: 2.7rem;
+      letter-spacing: 1px;
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 36px;
+      background: linear-gradient(90deg,var(--accent2),var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .carousel {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding-bottom: 20px;
+      gap: 32px;
+      width: 100%;
+      max-width: 1200px;
+      margin-bottom: 20px;
     }
 
     .card {
-      width: 300px;
-      height: 200px;
-      background-color: #ccc;
-      margin: 10px;
-      border-radius: 5px;
-      cursor: pointer;
+      background: var(--bg-card);
+      backdrop-filter: var(--glass-blur);
+      box-shadow: var(--shadow);
+      border-radius: var(--card-radius);
+      width: 250px;
+      height: 140px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .btn {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 8px 16px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 14px;
-      margin: 4px 2px;
       cursor: pointer;
-      border-radius: 4px;
-      transition: background-color 0.3s ease;
+      border: 1.5px solid rgba(120,247,255,0.07);
+      transition: transform var(--transition), 
+                  box-shadow var(--transition),
+                  border-color var(--transition);
+      position: relative;
+      overflow: hidden;
+      color: var(--text-main);
+      font-size: 1.17rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      z-index: 1;
     }
 
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 220%;
+      height: 220%;
+      background: radial-gradient(circle at 70% 40%, var(--accent2) 0%, transparent 85%);
+      opacity: 0.12;
+      z-index: 0;
+      transition: opacity var(--transition);
+    }
+
+    .card span {
+      z-index: 1;
+      pointer-events: none;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.19);
+    }
+
+    .card:hover, .card:focus-visible {
+      transform: translateY(-8px) scale(1.04) rotate(-1deg);
+      border-color: var(--accent);
+      box-shadow: 0 10px 40px 0px rgba(120, 247, 255, 0.18), var(--shadow);
+    }
+    .card:hover::before {
+      opacity: 0.26;
+    }
+
+    /* Button Styles (if you use them in tools) */
+    .btn {
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border: none;
+      color: #fff;
+      padding: 9px 20px;
+      font-size: 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      margin: 8px 0;
+      transition: background 0.2s;
+      box-shadow: 0 2px 12px rgba(106, 238, 255, 0.08);
+    }
     .btn:hover {
-      background-color: #45a049;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
     }
 
     input[type="text"] {
-      padding: 8px 10px;
-      font-size: 14px;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-      width: 200px;
+      padding: 10px 14px;
+      font-size: 16px;
+      border-radius: 7px;
+      border: 1.5px solid #444;
+      background: #232526;
+      color: var(--text-main);
+      margin-top: 8px;
+      outline: none;
+      transition: border-color 0.2s;
     }
 
     input[type="text"]:focus {
-      outline: none;
-      border-color: #4CAF50;
+      border-color: var(--accent2);
     }
 
     .footer {
-      background-color: #000;
-      padding: 20px;
-      color: #fff;
+      background: rgba(30,33,36,0.96);
+      padding: 22px 10px;
+      color: var(--text-secondary);
       text-align: center;
+      font-size: 1rem;
+      border-top: 1px solid #26292b;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
+      letter-spacing: 0.1px;
+      position: relative;
+      z-index: 2;
+    }
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 16px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .footer a:hover {
+      color: var(--accent2);
+      text-decoration: underline;
+    }
+    .footer span {
+      margin-left: 14px;
+      color: #666e7a;
+      font-size: 0.96em;
     }
 
-    .footer a {
-      color: #fff;
-      text-decoration: none;
-      margin: 0 10px;
+    /* Responsive */
+    @media (max-width: 900px) {
+      .carousel {
+        gap: 22px;
+      }
+      .card {
+        width: 200px;
+        height: 120px;
+        font-size: 1.05em;
+      }
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px 2vw 48px 2vw;
+      }
+      h1 {
+        font-size: 2.1rem;
+      }
+      .carousel {
+        gap: 16px;
+      }
+      .card {
+        width: 90vw;
+        height: 74px;
+        font-size: 1em;
+      }
     }
   </style>
 </head>
@@ -142,7 +253,7 @@
     <a href="#">About</a>
     <a href="#">Contact</a>
     <a href="#">Terms of Service</a>
-    <span>&copy; 2023 Utility Tools. All rights reserved.</span>
+    <span>&copy; 2025 Utility Tools. All rights reserved.</span>
   </div>
 </body>
 </html>
