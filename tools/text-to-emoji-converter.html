@@ -1,176 +1,391 @@
+<!-- TEXT TO EMOJI CONVERTER - text-to-emoji-converter.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Text to Emoji Converter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <title>Text to Emoji Converter | Utility Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            margin-bottom: 20px;
-        }
+    :root {
+      --primary: #f59e0b;
+      --primary-light: #fbbf24;
+      --secondary: #ef4444;
+      --bg-dark: #0f0f1a;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-weight: bold;
-        }
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
 
-        textarea {
-            width: 100%;
-            height: 100px;
-            resize: vertical;
-            margin-bottom: 10px;
-            padding: 5px;
-            font-size: 16px;
-        }
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.15) 0%, transparent 50%);
+      animation: bgRotate 30s linear infinite;
+    }
 
-        #convertBtn {
-            display: block;
-            width: fit-content;
-            margin: 0 auto;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4caf50;
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    @keyframes bgRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-        #convertBtn:hover {
-            background-color: #45a049;
-        }
+    .floating-emojis {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
 
-        #convertedText {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-    </style>
+    .floating-emoji {
+      position: absolute;
+      font-size: 2rem;
+      animation: floatUp 15s linear infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: 0.3; }
+      90% { opacity: 0.3; }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-4px);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 100px 20px 60px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+      box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+    }
+
+    .input-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      padding: 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-primary);
+      resize: vertical;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    textarea::placeholder {
+      color: var(--text-secondary);
+    }
+
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 18px;
+      font-size: 18px;
+      font-family: inherit;
+      font-weight: 600;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+    }
+
+    .result-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px;
+      display: none;
+    }
+
+    .result-card.show {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .result-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .copy-btn {
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .result-output {
+      font-size: 2rem;
+      line-height: 2;
+      word-break: break-word;
+      text-align: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      min-height: 100px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(20px);
+      padding: 16px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Text to Emoji Converter</h1>
+  <div class="bg-animation"></div>
+  <div class="floating-emojis" id="floatingEmojis"></div>
 
-        <!-- Text Input -->
-        <label for="textInput">Enter text:</label>
-        <textarea id="textInput" placeholder="Enter your text..."></textarea>
+  <a href="../index.html" class="back-button">
+    <span>←</span> Back to Tools
+  </a>
 
-        <!-- Convert Button -->
-        <button id="convertBtn">Convert to Emoji</button>
-
-        <!-- Converted Text -->
-        <div id="convertedText"></div>
+  <div class="container">
+    <div class="header">
+      <div class="icon-wrapper">😀</div>
+      <h1>Text to Emoji</h1>
+      <p class="subtitle">Transform your text into fun emoji representations</p>
     </div>
 
-    <script>
-        // Convert text to emoji
-        function convertToEmoji() {
-            var textInput = document.getElementById('textInput').value;
+    <div class="card">
+      <div class="input-group">
+        <label class="input-label">Enter your text</label>
+        <textarea id="textInput" placeholder="Type something fun..."></textarea>
+      </div>
+      <button class="btn" id="convertBtn">✨ Convert to Emoji</button>
+    </div>
 
-            // Map of text characters to corresponding emoji characters
-            var emojiMap = {
-                a: '🅰️',
-                b: '🅱️',
-                c: '🌜',
-                d: '🌛',
-                e: '🧩',
-                f: '🎏',
-                g: '🌀',
-                h: '🏠',
-                i: '👁️',
-                j: '🌡️',
-                k: '🎋',
-                l: '🔥',
-                m: 'Ⓜ️',
-                n: '📰',
-                o: '🔵',
-                p: '🅿️',
-                q: '🍳',
-                r: '®️',
-                s: '💲',
-                t: '🌴',
-                u: '⛑️',
-                v: '🔽',
-                w: '🌊',
-                x: '❌',
-                y: '🔱',
-                z: '💤',
-                ' ': '  ',
-                '0': '0️⃣',
-                '1': '1️⃣',
-                '2': '2️⃣',
-                '3': '3️⃣',
-                '4': '4️⃣',
-                '5': '5️⃣',
-                '6': '6️⃣',
-                '7': '7️⃣',
-                '8': '8️⃣',
-                '9': '9️⃣',
-                '!': '❗',
-                '?': '❓',
-                '.': '🔵',
-                ',': '🌻',
-                '+': '➕',
-                '-': '➖',
-                '*': '✳️',
-                '/': '➗',
-                '%': '💯',
-                '#': '#️⃣',
-                '@': '📢',
-                '$': '💲',
-                '&': '🔗',
-                '<': '⬅️',
-                '>': '➡️',
-                '(': '🔵',
-                ')': '🔵',
-                '[': '🔵',
-                ']': '🔵',
-                '{': '🔵',
-                '}': '🔵',
-                '"': '🔵',
-                '\'': '🔵',
-                '\\': '🔵',
-                '|': '🔵',
-                '`': '🔵',
-                '~': '🔵'
-            };
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <div class="result-title">
+          <span>🎉</span> Your Emoji Text
+        </div>
+        <button class="copy-btn" onclick="copyResult()">📋 Copy</button>
+      </div>
+      <div class="result-output" id="convertedText"></div>
+    </div>
+  </div>
 
-            var convertedText = '';
+  <div class="toast" id="toast">✓ Copied to clipboard!</div>
 
-            // Convert each character of the text to emoji
-            for (var i = 0; i < textInput.length; i++) {
-                var char = textInput[i].toLowerCase();
-                var emoji = emojiMap[char] || char;
-                convertedText += emoji;
-            }
+  <script>
+    // Create floating emojis
+    const emojis = ['😀', '🎉', '✨', '🌟', '💫', '🔥', '💖', '🎨', '🌈', '⭐'];
+    const container = document.getElementById('floatingEmojis');
+    
+    for (let i = 0; i < 15; i++) {
+      const emoji = document.createElement('div');
+      emoji.className = 'floating-emoji';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.animationDelay = Math.random() * 15 + 's';
+      emoji.style.animationDuration = (15 + Math.random() * 10) + 's';
+      container.appendChild(emoji);
+    }
 
-            // Display the converted text
-            document.getElementById('convertedText').textContent = convertedText;
-        }
+    const emojiMap = {
+      a: '🅰️', b: '🅱️', c: '🌜', d: '🌛', e: '📧', f: '🎏',
+      g: '🌀', h: '♓', i: '👁️', j: '🎷', k: '🎋', l: '👢',
+      m: 'Ⓜ️', n: '♑', o: '⭕', p: '🅿️', q: '🎯', r: '®️',
+      s: '💲', t: '✝️', u: '⛎', v: '✅', w: '〰️', x: '❌',
+      y: '💴', z: '💤', ' ': '  ',
+      '0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣',
+      '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣',
+      '!': '❗', '?': '❓', '.': '🔵', '+': '➕', '-': '➖',
+      '*': '✳️', '#': '#️⃣', '@': '📧', '$': '💲', '&': '🔗'
+    };
 
-        // Convert button click event
-        document.getElementById('convertBtn').addEventListener('click', function () {
-            convertToEmoji();
-        });
-    </script>
+    document.getElementById('convertBtn').addEventListener('click', () => {
+      const input = document.getElementById('textInput').value;
+      let result = '';
+      
+      for (const char of input.toLowerCase()) {
+        result += emojiMap[char] || char;
+      }
+      
+      document.getElementById('convertedText').textContent = result;
+      document.getElementById('resultCard').classList.add('show');
+    });
+
+    function copyResult() {
+      const text = document.getElementById('convertedText').textContent;
+      navigator.clipboard.writeText(text);
+      
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+  </script>
 </body>
 </html>

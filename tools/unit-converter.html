@@ -1,0 +1,648 @@
+<!-- UNIT CONVERTER - unit-converter.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Converter | Utility Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ec4899;
+      --primary-light: #f472b6;
+      --secondary: #8b5cf6;
+      --bg-dark: #0f0f1a;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+      animation: bgRotate 30s linear infinite;
+    }
+
+    @keyframes bgRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .floating-shapes {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      top: -10%;
+      left: -10%;
+    }
+
+    .shape-2 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      bottom: -5%;
+      right: -5%;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -30px) scale(1.1); }
+    }
+
+    .back-button {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(-4px);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 100px 20px 60px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .icon-wrapper {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 20px;
+      box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px;
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .category-tab.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-color: transparent;
+    }
+
+    .converter-section {
+      display: none;
+    }
+
+    .converter-section.active {
+      display: block;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    input[type="number"] {
+      flex: 1;
+      padding: 16px;
+      font-size: 18px;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
+    }
+
+    select {
+      width: 120px;
+      padding: 16px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-primary);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .swap-btn {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .swap-btn button {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swap-btn button:hover {
+      transform: rotate(180deg) scale(1.1);
+    }
+
+    .result-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .result-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .result-unit {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+
+    .formula {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+  </div>
+
+  <a href="../index.html" class="back-button">
+    <span>←</span> Back to Tools
+  </a>
+
+  <div class="container">
+    <div class="header">
+      <div class="icon-wrapper">📐</div>
+      <h1>Unit Converter</h1>
+      <p class="subtitle">Convert between different units of measurement</p>
+    </div>
+
+    <div class="card">
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="length">📏 Length</button>
+        <button class="category-tab" data-category="weight">⚖️ Weight</button>
+        <button class="category-tab" data-category="temperature">🌡️ Temp</button>
+        <button class="category-tab" data-category="area">📐 Area</button>
+        <button class="category-tab" data-category="volume">🧊 Volume</button>
+      </div>
+
+      <!-- Length -->
+      <div class="converter-section active" id="length">
+        <div class="input-group">
+          <label class="input-label">From</label>
+          <div class="input-row">
+            <input type="number" id="lengthFrom" value="1" oninput="convertLength()">
+            <select id="lengthFromUnit" onchange="convertLength()">
+              <option value="m">Meter</option>
+              <option value="km">Kilometer</option>
+              <option value="cm">Centimeter</option>
+              <option value="mm">Millimeter</option>
+              <option value="mi">Mile</option>
+              <option value="yd">Yard</option>
+              <option value="ft">Feet</option>
+              <option value="in">Inch</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button onclick="swapLength()">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">To</label>
+          <div class="input-row">
+            <input type="number" id="lengthTo" readonly>
+            <select id="lengthToUnit" onchange="convertLength()">
+              <option value="m">Meter</option>
+              <option value="km">Kilometer</option>
+              <option value="cm">Centimeter</option>
+              <option value="mm">Millimeter</option>
+              <option value="mi">Mile</option>
+              <option value="yd">Yard</option>
+              <option value="ft" selected>Feet</option>
+              <option value="in">Inch</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weight -->
+      <div class="converter-section" id="weight">
+        <div class="input-group">
+          <label class="input-label">From</label>
+          <div class="input-row">
+            <input type="number" id="weightFrom" value="1" oninput="convertWeight()">
+            <select id="weightFromUnit" onchange="convertWeight()">
+              <option value="kg">Kilogram</option>
+              <option value="g">Gram</option>
+              <option value="mg">Milligram</option>
+              <option value="lb">Pound</option>
+              <option value="oz">Ounce</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button onclick="swapWeight()">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">To</label>
+          <div class="input-row">
+            <input type="number" id="weightTo" readonly>
+            <select id="weightToUnit" onchange="convertWeight()">
+              <option value="kg">Kilogram</option>
+              <option value="g">Gram</option>
+              <option value="mg">Milligram</option>
+              <option value="lb" selected>Pound</option>
+              <option value="oz">Ounce</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperature -->
+      <div class="converter-section" id="temperature">
+        <div class="input-group">
+          <label class="input-label">From</label>
+          <div class="input-row">
+            <input type="number" id="tempFrom" value="0" oninput="convertTemp()">
+            <select id="tempFromUnit" onchange="convertTemp()">
+              <option value="c">Celsius</option>
+              <option value="f">Fahrenheit</option>
+              <option value="k">Kelvin</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button onclick="swapTemp()">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">To</label>
+          <div class="input-row">
+            <input type="number" id="tempTo" readonly>
+            <select id="tempToUnit" onchange="convertTemp()">
+              <option value="c">Celsius</option>
+              <option value="f" selected>Fahrenheit</option>
+              <option value="k">Kelvin</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Area -->
+      <div class="converter-section" id="area">
+        <div class="input-group">
+          <label class="input-label">From</label>
+          <div class="input-row">
+            <input type="number" id="areaFrom" value="1" oninput="convertArea()">
+            <select id="areaFromUnit" onchange="convertArea()">
+              <option value="sqm">m²</option>
+              <option value="sqkm">km²</option>
+              <option value="sqft">ft²</option>
+              <option value="sqyd">yd²</option>
+              <option value="acre">Acre</option>
+              <option value="ha">Hectare</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button onclick="swapArea()">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">To</label>
+          <div class="input-row">
+            <input type="number" id="areaTo" readonly>
+            <select id="areaToUnit" onchange="convertArea()">
+              <option value="sqm">m²</option>
+              <option value="sqkm">km²</option>
+              <option value="sqft" selected>ft²</option>
+              <option value="sqyd">yd²</option>
+              <option value="acre">Acre</option>
+              <option value="ha">Hectare</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Volume -->
+      <div class="converter-section" id="volume">
+        <div class="input-group">
+          <label class="input-label">From</label>
+          <div class="input-row">
+            <input type="number" id="volumeFrom" value="1" oninput="convertVolume()">
+            <select id="volumeFromUnit" onchange="convertVolume()">
+              <option value="l">Liter</option>
+              <option value="ml">Milliliter</option>
+              <option value="gal">Gallon</option>
+              <option value="qt">Quart</option>
+              <option value="pt">Pint</option>
+              <option value="cup">Cup</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button onclick="swapVolume()">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">To</label>
+          <div class="input-row">
+            <input type="number" id="volumeTo" readonly>
+            <select id="volumeToUnit" onchange="convertVolume()">
+              <option value="l">Liter</option>
+              <option value="ml">Milliliter</option>
+              <option value="gal" selected>Gallon</option>
+              <option value="qt">Quart</option>
+              <option value="pt">Pint</option>
+              <option value="cup">Cup</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.converter-section').forEach(s => s.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.category).classList.add('active');
+      });
+    });
+
+    // Conversion rates to base units
+    const lengthToM = { m: 1, km: 1000, cm: 0.01, mm: 0.001, mi: 1609.344, yd: 0.9144, ft: 0.3048, in: 0.0254 };
+    const weightToKg = { kg: 1, g: 0.001, mg: 0.000001, lb: 0.453592, oz: 0.0283495 };
+    const areaToSqm = { sqm: 1, sqkm: 1000000, sqft: 0.092903, sqyd: 0.836127, acre: 4046.86, ha: 10000 };
+    const volumeToL = { l: 1, ml: 0.001, gal: 3.78541, qt: 0.946353, pt: 0.473176, cup: 0.236588 };
+
+    function convertLength() {
+      const from = parseFloat(document.getElementById('lengthFrom').value) || 0;
+      const fromUnit = document.getElementById('lengthFromUnit').value;
+      const toUnit = document.getElementById('lengthToUnit').value;
+      
+      const inMeters = from * lengthToM[fromUnit];
+      const result = inMeters / lengthToM[toUnit];
+      
+      document.getElementById('lengthTo').value = result.toFixed(6).replace(/\.?0+$/, '');
+    }
+
+    function swapLength() {
+      const fromUnit = document.getElementById('lengthFromUnit');
+      const toUnit = document.getElementById('lengthToUnit');
+      [fromUnit.value, toUnit.value] = [toUnit.value, fromUnit.value];
+      convertLength();
+    }
+
+    function convertWeight() {
+      const from = parseFloat(document.getElementById('weightFrom').value) || 0;
+      const fromUnit = document.getElementById('weightFromUnit').value;
+      const toUnit = document.getElementById('weightToUnit').value;
+      
+      const inKg = from * weightToKg[fromUnit];
+      const result = inKg / weightToKg[toUnit];
+      
+      document.getElementById('weightTo').value = result.toFixed(6).replace(/\.?0+$/, '');
+    }
+
+    function swapWeight() {
+      const fromUnit = document.getElementById('weightFromUnit');
+      const toUnit = document.getElementById('weightToUnit');
+      [fromUnit.value, toUnit.value] = [toUnit.value, fromUnit.value];
+      convertWeight();
+    }
+
+    function convertTemp() {
+      const from = parseFloat(document.getElementById('tempFrom').value) || 0;
+      const fromUnit = document.getElementById('tempFromUnit').value;
+      const toUnit = document.getElementById('tempToUnit').value;
+      
+      let celsius;
+      if (fromUnit === 'c') celsius = from;
+      else if (fromUnit === 'f') celsius = (from - 32) * 5/9;
+      else celsius = from - 273.15;
+      
+      let result;
+      if (toUnit === 'c') result = celsius;
+      else if (toUnit === 'f') result = celsius * 9/5 + 32;
+      else result = celsius + 273.15;
+      
+      document.getElementById('tempTo').value = result.toFixed(2);
+    }
+
+    function swapTemp() {
+      const fromUnit = document.getElementById('tempFromUnit');
+      const toUnit = document.getElementById('tempToUnit');
+      [fromUnit.value, toUnit.value] = [toUnit.value, fromUnit.value];
+      convertTemp();
+    }
+
+    function convertArea() {
+      const from = parseFloat(document.getElementById('areaFrom').value) || 0;
+      const fromUnit = document.getElementById('areaFromUnit').value;
+      const toUnit = document.getElementById('areaToUnit').value;
+      
+      const inSqm = from * areaToSqm[fromUnit];
+      const result = inSqm / areaToSqm[toUnit];
+      
+      document.getElementById('areaTo').value = result.toFixed(6).replace(/\.?0+$/, '');
+    }
+
+    function swapArea() {
+      const fromUnit = document.getElementById('areaFromUnit');
+      const toUnit = document.getElementById('areaToUnit');
+      [fromUnit.value, toUnit.value] = [toUnit.value, fromUnit.value];
+      convertArea();
+    }
+
+    function convertVolume() {
+      const from = parseFloat(document.getElementById('volumeFrom').value) || 0;
+      const fromUnit = document.getElementById('volumeFromUnit').value;
+      const toUnit = document.getElementById('volumeToUnit').value;
+      
+      const inL = from * volumeToL[fromUnit];
+      const result = inL / volumeToL[toUnit];
+      
+      document.getElementById('volumeTo').value = result.toFixed(6).replace(/\.?0+$/, '');
+    }
+
+    function swapVolume() {
+      const fromUnit = document.getElementById('volumeFromUnit');
+      const toUnit = document.getElementById('volumeToUnit');
+      [fromUnit.value, toUnit.value] = [toUnit.value, fromUnit.value];
+      convertVolume();
+    }
+
+    // Initial conversions
+    convertLength();
+    convertWeight();
+    convertTemp();
+    convertArea();
+    convertVolume();
+  </script>
+</body>
+</html>

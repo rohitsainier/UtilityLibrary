@@ -4,256 +4,1212 @@
   <meta charset="UTF-8">
   <title>Utility Tools</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     :root {
-      --bg-dark: #181a1b;
-      --bg-card: rgba(44, 47, 51, 0.85);
-      --accent: #78f7ff;
-      --accent2: #6e6eff;
-      --text-main: #e3e3e3;
-      --text-secondary: #9fa6ad;
-      --glass-blur: blur(10px);
-      --shadow: 0 8px 24px rgba(0,0,0,0.3);
-      --card-radius: 18px;
-      --transition: 0.3s cubic-bezier(.77,0,.18,1);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --bg-dark: #0f0f1a;
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --glow: 0 0 40px rgba(99, 102, 241, 0.3);
     }
 
     body {
-      font-family: 'Inter', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'Poppins', sans-serif;
       background: var(--bg-dark);
-      color: var(--text-main);
+      color: var(--text-primary);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .container {
-      padding: 40px 20px 60px 20px;
-      display: flex;
-      flex-direction: column;
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.1) 0%, transparent 40%);
+      animation: bgRotate 30s linear infinite;
+    }
+
+    @keyframes bgRotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .floating-shapes {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      bottom: 10%;
+      right: 10%;
+      animation-delay: -5s;
+    }
+
+    .shape-3 {
+      width: 250px;
+      height: 250px;
+      background: linear-gradient(135deg, var(--secondary), var(--accent));
+      top: 50%;
+      left: 50%;
+      animation-delay: -10s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, -50px) scale(1.1); }
+      50% { transform: translate(-30px, 30px) scale(0.9); }
+      75% { transform: translate(-50px, -30px) scale(1.05); }
+    }
+
+    /* Particles */
+    .particles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: particleFloat 15s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+      0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Header */
+    .header {
+      padding: 60px 20px 40px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      display: inline-flex;
       align-items: center;
-      min-height: 90vh;
-      justify-content: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .logo-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: var(--glow);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.6), 0 0 60px rgba(236, 72, 153, 0.3); }
     }
 
     h1 {
-      font-size: 2.7rem;
-      letter-spacing: 1px;
-      text-align: center;
-      margin-bottom: 36px;
-      background: linear-gradient(90deg,var(--accent2),var(--accent));
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, var(--primary-light) 50%, var(--secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Search Bar */
+    .search-container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 18px 24px 18px 56px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), var(--glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      font-size: 20px;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    /* Tools Grid */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 20px 80px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    /* Tool Card */
+    .card {
+      position: relative;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardAppear 0.6s ease forwards;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.2s; }
+    .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.3s; }
+    .card:nth-child(7) { animation-delay: 0.35s; }
+    .card:nth-child(8) { animation-delay: 0.4s; }
+    .card:nth-child(9) { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.5s; }
+    .card:nth-child(11) { animation-delay: 0.55s; }
+    .card:nth-child(12) { animation-delay: 0.6s; }
+    .card:nth-child(13) { animation-delay: 0.65s; }
+
+    @keyframes cardAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.1) 0%, 
+        transparent 50%,
+        rgba(236, 72, 153, 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(99, 102, 241, 0.3);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(99, 102, 241, 0.15);
+    }
+
+    .card:hover::before,
+    .card:hover::after {
+      opacity: 1;
+    }
+
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover .card-icon {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      transition: color 0.3s ease;
+    }
+
+    .card:hover .card-title {
+      background: linear-gradient(135deg, var(--primary-light), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .carousel {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 32px;
-      width: 100%;
-      max-width: 1200px;
-      margin-bottom: 20px;
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
 
-    .card {
-      background: var(--bg-card);
-      backdrop-filter: var(--glass-blur);
-      box-shadow: var(--shadow);
-      border-radius: var(--card-radius);
-      width: 250px;
-      height: 140px;
+    .card-arrow {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      border: 1.5px solid rgba(120,247,255,0.07);
-      transition: transform var(--transition), 
-                  box-shadow var(--transition),
-                  border-color var(--transition);
+      font-size: 18px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translateX(0);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    /* Card Color Variants */
+    .card[data-color="purple"] .card-icon { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+    .card[data-color="pink"] .card-icon { background: linear-gradient(135deg, #ec4899, #f472b6); }
+    .card[data-color="cyan"] .card-icon { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+    .card[data-color="green"] .card-icon { background: linear-gradient(135deg, #10b981, #34d399); }
+    .card[data-color="orange"] .card-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+    .card[data-color="red"] .card-icon { background: linear-gradient(135deg, #ef4444, #f87171); }
+    .card[data-color="blue"] .card-icon { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .card[data-color="indigo"] .card-icon { background: linear-gradient(135deg, #4f46e5, #818cf8); }
+
+    /* No Results */
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .no-results.show {
+      display: block;
+    }
+
+    .no-results-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    /* Feature Request Section */
+    .feature-request-section {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .feature-request-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 40px;
       position: relative;
       overflow: hidden;
-      color: var(--text-main);
-      font-size: 1.17rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-      text-decoration: none;
-      z-index: 1;
     }
 
-    .card::before {
-      content: "";
+    .feature-request-card::before {
+      content: '';
       position: absolute;
-      top: -60%;
-      left: -60%;
-      width: 220%;
-      height: 220%;
-      background: radial-gradient(circle at 70% 40%, var(--accent2) 0%, transparent 85%);
-      opacity: 0.12;
-      z-index: 0;
-      transition: opacity var(--transition);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
     }
 
-    .card span {
-      z-index: 1;
-      pointer-events: none;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.19);
-    }
-
-    .card:hover, .card:focus-visible {
-      transform: translateY(-8px) scale(1.04) rotate(-1deg);
-      border-color: var(--accent);
-      box-shadow: 0 10px 40px 0px rgba(120, 247, 255, 0.18), var(--shadow);
-    }
-    .card:hover::before {
-      opacity: 0.26;
-    }
-
-    /* Button Styles (if you use them in tools) */
-    .btn {
-      background: linear-gradient(90deg, var(--accent2), var(--accent));
-      border: none;
-      color: #fff;
-      padding: 9px 20px;
-      font-size: 15px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 500;
-      margin: 8px 0;
-      transition: background 0.2s;
-      box-shadow: 0 2px 12px rgba(106, 238, 255, 0.08);
-    }
-    .btn:hover {
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-    }
-
-    input[type="text"] {
-      padding: 10px 14px;
-      font-size: 16px;
-      border-radius: 7px;
-      border: 1.5px solid #444;
-      background: #232526;
-      color: var(--text-main);
-      margin-top: 8px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--accent2);
-    }
-
-    .footer {
-      background: rgba(30,33,36,0.96);
-      padding: 22px 10px;
-      color: var(--text-secondary);
+    .feature-request-header {
       text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .feature-request-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+    }
+
+    .feature-request-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff, var(--primary-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .feature-request-header p {
+      color: var(--text-secondary);
       font-size: 1rem;
-      border-top: 1px solid #26292b;
-      box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
-      letter-spacing: 0.1px;
-      position: relative;
-      z-index: 2;
     }
-    .footer a {
-      color: var(--accent);
-      text-decoration: none;
-      margin: 0 16px;
+
+    .feature-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
       font-weight: 500;
-      transition: color 0.2s;
+      color: var(--text-secondary);
     }
-    .footer a:hover {
-      color: var(--accent2);
-      text-decoration: underline;
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.3s ease;
     }
-    .footer span {
-      margin-left: 14px;
-      color: #666e7a;
-      font-size: 0.96em;
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .submit-btn {
+      padding: 18px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .submit-btn .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    .submit-btn.loading .spinner {
+      display: block;
+    }
+
+    .submit-btn.loading .btn-text {
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #10b981, #34d399);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      margin: 0 auto 20px;
+      animation: successPop 0.5s ease;
+    }
+
+    @keyframes successPop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .success-message h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #10b981;
+    }
+
+    .success-message p {
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .reset-btn {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      border-color: var(--primary);
+      color: var(--text-primary);
+    }
+
+    /* Footer */
+    .footer {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+
+    .footer-copy {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .footer-copy span {
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 600;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      padding: 30px 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-light), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 4px;
     }
 
     /* Responsive */
-    @media (max-width: 900px) {
-      .carousel {
-        gap: 22px;
+    @media (max-width: 768px) {
+      .header {
+        padding: 40px 20px 20px;
       }
-      .card {
-        width: 200px;
-        height: 120px;
-        font-size: 1.05em;
-      }
-    }
-    @media (max-width: 600px) {
-      .container {
-        padding: 24px 2vw 48px 2vw;
-      }
-      h1 {
-        font-size: 2.1rem;
-      }
-      .carousel {
+
+      .tools-grid {
+        grid-template-columns: 1fr;
         gap: 16px;
       }
+
       .card {
-        width: 90vw;
-        height: 74px;
-        font-size: 1em;
+        padding: 24px 20px;
       }
+
+      .stats-bar {
+        gap: 32px;
+      }
+
+      .footer-links {
+        gap: 20px;
+      }
+
+      .feature-request-card {
+        padding: 30px 20px;
+      }
+    }
+
+    /* Hidden for search */
+    .card.hidden {
+      display: none;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 16px 24px;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      color: white;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(150%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      border-color: #10b981;
+    }
+
+    .toast.error {
+      border-color: #ef4444;
+    }
+
+    .toast-icon {
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Utility Tools</h1>
+  <!-- Background Animation -->
+  <div class="bg-animation"></div>
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+  <div class="particles" id="particles"></div>
 
-    <div class="carousel">
-      <a href="tools/random-color-generator.html" class="card">
-        <span>Random Color Generator</span>
-      </a>
-      <a href="tools/text-to-speech-converter.html" class="card">
-        <span>Text to Speech Converter</span>
-      </a>
-      <a href="tools/image-compressor.html" class="card">
-        <span>Image Compressor</span>
-      </a>
-      <a href="tools/compare.html" class="card">
-        <span>Text Compare</span>
-      </a>
-      <a href="tools/watermark-app.html" class="card">
-        <span>Watermark App</span>
-      </a>
-      <a href="tools/text-to-emoji-converter.html" class="card">
-        <span>Text to Emoji Converter</span>
-      </a>
-      <a href="tools/password-generator.html" class="card">
-        <span>Password Generator</span>
-      </a>
-      <a href="tools/lorem-ipsum-generator.html" class="card">
-        <span>Lorem Ipsum Generator</span>
-      </a>
-      <a href="tools/qrcode-generator.html" class="card">
-        <span>QR Code Generator</span>
-      </a>
-      <a href="tools/unit-converter.html" class="card">
-        <span>Unit Converter</span>
-      </a>
-      <a href="tools/json-formatter-validator.html" class="card">
-        <span>JSON Formatter and Validator</span>
-      </a>
-      <a href="tools/url-shortener.html" class="card">
-        <span>URL Shortener</span>
-      </a>
-      <a href="tools/bmi-calculator.html" class="card">
-        <span>BMI Calculator</span>
-      </a>
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+    </div>
+    <h1>Utility Tools</h1>
+    <p class="subtitle">A collection of powerful tools to boost your productivity and simplify your workflow</p>
+  </header>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-number">13+</div>
+      <div class="stat-label">Free Tools</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Browser Based</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Ads</div>
     </div>
   </div>
 
-  <div class="footer">
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-    <a href="#">Terms of Service</a>
-    <span>&copy; 2025 Utility Tools. All rights reserved.</span>
+  <!-- Search -->
+  <div class="search-container">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search for tools...">
+    </div>
   </div>
+
+  <!-- Tools Grid -->
+  <main class="container">
+    <div class="tools-grid" id="toolsGrid">
+      
+      <a href="tools/random-color-generator.html" class="card" data-color="purple">
+        <div class="card-icon">🎨</div>
+        <div class="card-content">
+          <div class="card-title">Random Color Generator</div>
+          <div class="card-desc">Generate beautiful random colors with hex and RGB values</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/text-to-speech-converter.html" class="card" data-color="pink">
+        <div class="card-icon">🔊</div>
+        <div class="card-content">
+          <div class="card-title">Text to Speech Converter</div>
+          <div class="card-desc">Convert any text into natural-sounding speech</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/image-compressor.html" class="card" data-color="cyan">
+        <div class="card-icon">🖼️</div>
+        <div class="card-content">
+          <div class="card-title">Image Compressor</div>
+          <div class="card-desc">Reduce image file size without losing quality</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/compare.html" class="card" data-color="green">
+        <div class="card-icon">📝</div>
+        <div class="card-content">
+          <div class="card-title">Text Compare</div>
+          <div class="card-desc">Compare two texts and highlight the differences</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/watermark-app.html" class="card" data-color="orange">
+        <div class="card-icon">💧</div>
+        <div class="card-content">
+          <div class="card-title">Watermark App</div>
+          <div class="card-desc">Add custom watermarks to protect your images</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/text-to-emoji-converter.html" class="card" data-color="red">
+        <div class="card-icon">😀</div>
+        <div class="card-content">
+          <div class="card-title">Text to Emoji Converter</div>
+          <div class="card-desc">Transform your text into fun emoji representations</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/password-generator.html" class="card" data-color="blue">
+        <div class="card-icon">🔐</div>
+        <div class="card-content">
+          <div class="card-title">Password Generator</div>
+          <div class="card-desc">Create strong and secure random passwords</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/lorem-ipsum-generator.html" class="card" data-color="indigo">
+        <div class="card-icon">📄</div>
+        <div class="card-content">
+          <div class="card-title">Lorem Ipsum Generator</div>
+          <div class="card-desc">Generate placeholder text for your designs</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/qrcode-generator.html" class="card" data-color="purple">
+        <div class="card-icon">📱</div>
+        <div class="card-content">
+          <div class="card-title">QR Code Generator</div>
+          <div class="card-desc">Create QR codes for URLs, text, and more</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/unit-converter.html" class="card" data-color="pink">
+        <div class="card-icon">📐</div>
+        <div class="card-content">
+          <div class="card-title">Unit Converter</div>
+          <div class="card-desc">Convert between different units of measurement</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/json-formatter-validator.html" class="card" data-color="cyan">
+        <div class="card-icon">{ }</div>
+        <div class="card-content">
+          <div class="card-title">JSON Formatter & Validator</div>
+          <div class="card-desc">Format and validate your JSON data instantly</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/url-shortener.html" class="card" data-color="green">
+        <div class="card-icon">🔗</div>
+        <div class="card-content">
+          <div class="card-title">URL Shortener</div>
+          <div class="card-desc">Shorten long URLs for easy sharing</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+      <a href="tools/bmi-calculator.html" class="card" data-color="orange">
+        <div class="card-icon">⚖️</div>
+        <div class="card-content">
+          <div class="card-title">BMI Calculator</div>
+          <div class="card-desc">Calculate your Body Mass Index quickly</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </a>
+
+    </div>
+
+    <div class="no-results" id="noResults">
+      <div class="no-results-icon">🔍</div>
+      <h3>No tools found</h3>
+      <p>Try a different search term</p>
+    </div>
+  </main>
+
+  <!-- Feature Request Section -->
+  <section class="feature-request-section">
+    <div class="feature-request-card">
+      <div class="feature-request-header">
+        <div class="feature-request-icon">💡</div>
+        <h2>Request a Feature</h2>
+        <p>Have an idea for a new tool? Let us know and we'll build it!</p>
+      </div>
+
+      <form class="feature-form" id="featureForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="userName">Your Name</label>
+            <input type="text" id="userName" name="name" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label for="userEmail">Your Email</label>
+            <input type="email" id="userEmail" name="email" placeholder="john@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="featureTitle">Feature Title</label>
+          <input type="text" id="featureTitle" name="title" placeholder="e.g., Markdown Editor" required>
+        </div>
+
+        <div class="form-group">
+          <label for="featureDescription">Description</label>
+          <textarea id="featureDescription" name="description" placeholder="Describe the feature you'd like to see. What should it do? How would it help you?" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text">🚀 Submit Request</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+
+      <div class="success-message" id="successMessage">
+        <div class="success-icon">✓</div>
+        <h3>Thank You!</h3>
+        <p>Your feature request has been submitted successfully. We'll review it and get back to you soon!</p>
+        <button class="reset-btn" id="resetBtn">Submit Another Request</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span class="toast-message">Message sent successfully!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Privacy Policy</a>
+    </div>
+    <div class="footer-copy">
+      © 2025 <span>Utility Tools</span>. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+      }
+    }
+    createParticles();
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.card');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const title = card.querySelector('.card-title').textContent.toLowerCase();
+        const desc = card.querySelector('.card-desc').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      noResults.classList.toggle('show', visibleCount === 0);
+    });
+
+    // Add keyboard navigation
+    document.addEventListener('keydown', function(e) {
+      if (e.key === '/' && document.activeElement !== searchInput) {
+        e.preventDefault();
+        searchInput.focus();
+      }
+      if (e.key === 'Escape') {
+        searchInput.blur();
+        searchInput.value = '';
+        cards.forEach(card => card.classList.remove('hidden'));
+        noResults.classList.remove('show');
+      }
+    });
+
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    cards.forEach(card => observer.observe(card));
+
+    // Feature Request Form Handling
+    const featureForm = document.getElementById('featureForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const resetBtn = document.getElementById('resetBtn');
+    const toast = document.getElementById('toast');
+
+    // Show toast notification
+    function showToast(message, type = 'success') {
+      const toastIcon = toast.querySelector('.toast-icon');
+      const toastMessage = toast.querySelector('.toast-message');
+      
+      toast.className = 'toast ' + type;
+      toastIcon.textContent = type === 'success' ? '✓' : '✕';
+      toastMessage.textContent = message;
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 4000);
+    }
+
+    // Form submission using FormSubmit.co (FREE - No backend needed!)
+    // Replace YOUR_EMAIL@example.com with your actual email address
+    featureForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      submitBtn.classList.add('loading');
+      submitBtn.disabled = true;
+
+      const formData = new FormData(featureForm);
+      
+      // Using FormSubmit.co - Replace the email below with YOUR email
+      // First submission will require email verification
+      const YOUR_EMAIL = 'YOUR_EMAIL@example.com'; // ⚠️ CHANGE THIS TO YOUR EMAIL
+
+      try {
+        const response = await fetch(`https://formsubmit.co/ajax/${YOUR_EMAIL}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: formData.get('name'),
+            email: formData.get('email'),
+            title: formData.get('title'),
+            description: formData.get('description'),
+            _subject: `New Feature Request: ${formData.get('title')}`,
+            _template: 'table'
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          featureForm.style.display = 'none';
+          successMessage.classList.add('show');
+          showToast('Feature request submitted successfully!', 'success');
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToast('Failed to submit. Please try again.', 'error');
+      } finally {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Reset form
+    resetBtn.addEventListener('click', function() {
+      featureForm.reset();
+      featureForm.style.display = 'flex';
+      successMessage.classList.remove('show');
+    });
+  </script>
 </body>
 </html>
